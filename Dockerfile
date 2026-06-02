@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ ./backend/
-COPY IPL.csv .
+COPY ipl_dynasty.db .
 
 EXPOSE 8000
 

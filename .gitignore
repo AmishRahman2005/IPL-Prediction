@@ -31,6 +31,5 @@ __pycache__/
 model.pkl
 
 # Databases and Datasets
-ipl_dynasty.db
 IPL.csv
 
