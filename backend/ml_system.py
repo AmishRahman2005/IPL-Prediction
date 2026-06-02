@@ -1,11 +1,12 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import StratifiedKFold, cross_validate
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
-import xgboost as xgb
-import lightgbm as lgb
-from sklearn.metrics import accuracy_score, roc_auc_score
+from sklearn.model_selection import StratifiedKFold, cross_validate  # pyrefly: ignore [missing-import]
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier  # pyrefly: ignore [missing-import]
+from sklearn.linear_model import LogisticRegression  # pyrefly: ignore [missing-import]
+import xgboost as xgb  # pyrefly: ignore [missing-import]
+import lightgbm as lgb  # pyrefly: ignore [missing-import]
+from sklearn.metrics import accuracy_score, roc_auc_score  # pyrefly: ignore [missing-import]
+
 import pickle
 import os
 

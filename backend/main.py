@@ -1,6 +1,6 @@
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException  # pyrefly: ignore [missing-import]
+from fastapi.middleware.cors import CORSMiddleware  # pyrefly: ignore [missing-import]
+from pydantic import BaseModel  # pyrefly: ignore [missing-import]
 import pandas as pd
 import numpy as np
 import threading
@@ -9,9 +9,9 @@ import shutil
 from typing import Dict, List, Any
 
 # Import our custom components
-from backend.data_pipeline import IPLDataPipeline, ACTIVE_TEAMS, TEAM_BASELINES
-from backend.ml_system import IPLMLSystem
-from backend.simulation_engine import IPLSimulationEngine
+from backend.data_pipeline import IPLDataPipeline, ACTIVE_TEAMS, TEAM_BASELINES  # pyrefly: ignore [missing-import]
+from backend.ml_system import IPLMLSystem  # pyrefly: ignore [missing-import]
+from backend.simulation_engine import IPLSimulationEngine  # pyrefly: ignore [missing-import]
 
 app = FastAPI(title="IPL Dynasty AI API")
 

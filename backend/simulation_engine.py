@@ -3,7 +3,7 @@ import pandas as pd
 import random
 import math
 import copy
-from backend.data_pipeline import ACTIVE_TEAMS, HOME_CITIES, get_is_home
+from backend.data_pipeline import ACTIVE_TEAMS, HOME_CITIES, get_is_home  # pyrefly: ignore [missing-import]
 
 # Generate the official IPL 10-team, 70-match schedule
 def generate_ipl_schedule():
