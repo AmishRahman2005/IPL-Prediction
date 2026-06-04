@@ -14,10 +14,9 @@ class IPLMLSystem:
     def __init__(self):
         self.models = {
             'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),
-            'Random Forest': RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42),
-            'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, max_depth=4, random_state=42),
-            'XGBoost': xgb.XGBClassifier(n_estimators=100, max_depth=4, random_state=42, eval_metric='logloss'),
-            'LightGBM': lgb.LGBMClassifier(n_estimators=100, max_depth=4, random_state=42, verbose=-1)
+            'Random Forest': RandomForestClassifier(n_estimators=40, max_depth=6, random_state=42),
+            'XGBoost': xgb.XGBClassifier(n_estimators=40, max_depth=4, random_state=42, eval_metric='logloss'),
+            'LightGBM': lgb.LGBMClassifier(n_estimators=40, max_depth=4, random_state=42, verbose=-1)
         }
         self.best_model_name = None
         self.best_model = None

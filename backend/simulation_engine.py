@@ -309,8 +309,8 @@ class IPLSimulationEngine:
                     
                     # Update rankings
                     tf['last_season_rank'] = rank
-                    tf['last_3_seasons_avg_rank'] = np.mean(recent_ranks[team][:3])
-                    tf['last_5_seasons_avg_rank'] = np.mean(recent_ranks[team])
+                    tf['last_3_seasons_avg_rank'] = sum(recent_ranks[team][:3]) / len(recent_ranks[team][:3])
+                    tf['last_5_seasons_avg_rank'] = sum(recent_ranks[team]) / len(recent_ranks[team])
                     
                     # Update championships
                     if team == champion:

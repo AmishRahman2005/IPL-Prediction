@@ -85,9 +85,9 @@ def train_and_simulate_job(weights: Dict[str, float] = None, force_retrain: bool
             compile_analytics_data()
             
         state["status_message"] = "Running Monte Carlo simulations..."
-        # If it is a resimulation (models already trained), run 5,000 simulations for speed.
-        # Otherwise, run 10,000 simulations for the initial full training.
-        n_sims = 10000 if not ml_system.best_model_name or force_retrain else 5000
+        # If it is a resimulation (models already trained), run 800 simulations for speed.
+        # Otherwise, run 1,500 simulations for the initial full training.
+        n_sims = 1500 if not ml_system.best_model_name or force_retrain else 800
         
         sim_results = sim_engine.run_monte_carlo(
             n_simulations=n_sims,
