@@ -504,6 +504,18 @@ class IPLDataPipeline:
         # We start from year 2011 to allow at least 3 years of history for averages
         train_matches = self.df_matches[self.df_matches['year'] >= 2011]
         
+        # Pre-compute features for all unique (team, year) combinations in train_matches
+        print("Pre-computing historical features per team/year...")
+        team_years = set()
+        for idx, row in train_matches.iterrows():
+            team_years.add((row['team1'], row['year']))
+            team_years.add((row['team2'], row['year']))
+            
+        feature_cache = {}
+        for team, year in team_years:
+            feature_cache[(team, year)] = self.get_team_features_for_season(team, year)
+            
+        print("Building feature differences dataset...")
         for idx, row in train_matches.iterrows():
             t1 = row['team1']
             t2 = row['team2']
@@ -514,8 +526,8 @@ class IPLDataPipeline:
             if winner not in [t1, t2] or pd.isna(winner):
                 continue
                 
-            f1 = self.get_team_features_for_season(t1, year)
-            f2 = self.get_team_features_for_season(t2, year)
+            f1 = feature_cache[(t1, year)]
+            f2 = feature_cache[(t2, year)]
             
             # Check home advantage
             is_home_t1 = get_is_home(t1, row['city'], row['venue'])
