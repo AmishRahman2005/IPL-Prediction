@@ -11,8 +11,9 @@ services:
         value: 8000
 
   # React frontend (Static Site)
-  - type: static
+  - type: web
     name: ipl-dynasty-frontend
+    runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     plan: free
