@@ -95,6 +95,8 @@ class IPLDataPipeline:
             if not db_matches.empty:
                 print("Loaded matches from SQLite database.")
                 self.df_matches = db_matches
+                # Pre-compute home flags
+                self.precompute_home_flags()
                 # Calculate champions per season
                 self.compute_champions()
                 # Compute season statistics and rankings
@@ -196,6 +198,8 @@ class IPLDataPipeline:
         self.df_matches = pd.DataFrame(matches).sort_values(by='date').reset_index(drop=True)
         print(f"Extracted {len(self.df_matches)} clean matches.")
         
+        # Pre-compute home flags
+        self.precompute_home_flags()
         # Calculate champions per season
         self.compute_champions()
         # Compute season statistics and rankings
@@ -203,6 +207,11 @@ class IPLDataPipeline:
         
         # Cache clean matches in database
         init_db(self.df_matches, overwrite=force_csv)
+
+    def precompute_home_flags(self):
+        print("Pre-computing home team advantage flags...")
+        self.df_matches['is_home_team1'] = self.df_matches.apply(lambda r: get_is_home(r['team1'], r['city'], r['venue']), axis=1)
+        self.df_matches['is_home_team2'] = self.df_matches.apply(lambda r: get_is_home(r['team2'], r['city'], r['venue']), axis=1)
         
     def compute_champions(self):
         self.champions = {}
@@ -417,9 +426,13 @@ class IPLDataPipeline:
         nrr_avg = hist_stats.head(3)['nrr'].mean() if not hist_stats.empty else 0.0
         
         # Home vs Away win pct
-        # We classify home matches based on venue/city matches home cities list
-        home_matches = hist_matches[hist_matches.apply(lambda r: get_is_home(team, r['city'], r['venue']), axis=1) == 1]
-        away_matches = hist_matches[hist_matches.apply(lambda r: get_is_home(team, r['city'], r['venue']), axis=1) == 0]
+        # We classify home matches based on pre-computed home flags
+        is_home_mask = (
+            ((hist_matches['team1'] == team) & (hist_matches['is_home_team1'] == 1)) |
+            ((hist_matches['team2'] == team) & (hist_matches['is_home_team2'] == 1))
+        )
+        home_matches = hist_matches[is_home_mask]
+        away_matches = hist_matches[~is_home_mask]
         
         home_wins = len(home_matches[home_matches['winner'] == team])
         home_win_pct = home_wins / len(home_matches) if len(home_matches) > 0 else 0.5
