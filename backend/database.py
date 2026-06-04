@@ -15,9 +15,13 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-def init_db(df_matches: pd.DataFrame = None):
+def init_db(df_matches: pd.DataFrame = None, overwrite: bool = False):
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    if overwrite:
+        cursor.execute("DROP TABLE IF EXISTS matches")
+        print("Dropped existing matches table for overwrite.")
     
     # Create matches table
     cursor.execute("""
@@ -50,7 +54,9 @@ def init_db(df_matches: pd.DataFrame = None):
         # Check if table already has data to avoid duplicate insertion
         cursor.execute("SELECT COUNT(*) FROM matches")
         count = cursor.fetchone()[0]
-        if count == 0:
+        if count == 0 or overwrite:
+            if overwrite:
+                cursor.execute("DELETE FROM matches")
             df_matches.to_sql("matches", conn, if_exists="append", index=False)
             print(f"Stored {len(df_matches)} matches in database.")
             

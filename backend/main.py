@@ -77,7 +77,7 @@ def train_and_simulate_job(weights: Dict[str, float] = None, force_retrain: bool
         # Only clean and train ML models if they aren't already trained, or if forced
         if force_retrain or not ml_system.best_model_name:
             state["status_message"] = "Loading and preprocessing IPL dataset..."
-            data_pipeline.load_and_clean_data()
+            data_pipeline.load_and_clean_data(force_csv=force_retrain)
             
             state["status_message"] = "Extracting features and training Machine Learning models..."
             X, y = data_pipeline.generate_ml_features()
@@ -305,7 +305,7 @@ async def upload_dataset(file: UploadFile = File(...), background_tasks: Backgro
         os.rename(temp_file, "IPL.csv")
         
         # Trigger retraining
-        background_tasks.add_task(train_and_simulate_job)
+        background_tasks.add_task(train_and_simulate_job, force_retrain=True)
         return {"status": "success", "message": "Dataset uploaded successfully, training triggered."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error standardizing dataset file: {str(e)}")

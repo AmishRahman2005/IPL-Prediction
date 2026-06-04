@@ -86,19 +86,20 @@ class IPLDataPipeline:
         self.team_season_stats = None
         self.champions = {}
         
-    def load_and_clean_data(self):
+    def load_and_clean_data(self, force_csv: bool = False):
         from backend.database import init_db, load_matches_from_db
         
         # Try loading from database first
-        db_matches = load_matches_from_db()
-        if not db_matches.empty:
-            print("Loaded matches from SQLite database.")
-            self.df_matches = db_matches
-            # Calculate champions per season
-            self.compute_champions()
-            # Compute season statistics and rankings
-            self.compute_season_stats()
-            return
+        if not force_csv:
+            db_matches = load_matches_from_db()
+            if not db_matches.empty:
+                print("Loaded matches from SQLite database.")
+                self.df_matches = db_matches
+                # Calculate champions per season
+                self.compute_champions()
+                # Compute season statistics and rankings
+                self.compute_season_stats()
+                return
 
         if not os.path.exists(self.filepath):
             raise FileNotFoundError(f"Dataset file not found at {self.filepath}")
@@ -201,7 +202,7 @@ class IPLDataPipeline:
         self.compute_season_stats()
         
         # Cache clean matches in database
-        init_db(self.df_matches)
+        init_db(self.df_matches, overwrite=force_csv)
         
     def compute_champions(self):
         self.champions = {}
