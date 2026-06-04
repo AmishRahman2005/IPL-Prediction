@@ -11,11 +11,10 @@ services:
         value: 8000
 
   # React frontend (Static Site)
-  - type: web
+  - type: static
     name: ipl-dynasty-frontend
-    env: static
     buildCommand: npm install && npm run build
-    publishDir: dist
+    staticPublishPath: ./dist
     plan: free
     envVars:
       - key: VITE_API_BASE_URL
